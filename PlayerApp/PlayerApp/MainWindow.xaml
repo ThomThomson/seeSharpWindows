@@ -4,20 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PlayerApp"
+        MinHeight="350" MinWidth="550"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
+        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+    </Window.CommandBindings>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="525*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
             <RowDefinition Height="320*"/>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="30*"/>
         </Grid.RowDefinitions>
-        <MediaElement x:Name="MediaPlayer" Grid.RowSpan="1" LoadedBehavior="Manual"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-            <Button x:Name="btnPlay" Content="Play" Click="btnPlay_Click" Width="50" Height="25" Margin="5"/>
-            <Button x:Name="btnStop" Content="Stop" Click="btnStop_Click" Width="50" Height="25" Margin="5"/>
-            <Button x:Name="btnMoveBack" Content="Back" Click="btnMoveBack_Click" Width="50" Height="25" Margin="5"/>
-            <Button x:Name="btnMoveForward" Content="Forward" Click="btnMoveForward_Click" Width="50" Height="25" Margin="5"/>
-            <Button x:Name="btnOpen" Content="Open" Click="btnOpen_Click" Width="50" Height="25" Margin="5"/>
+        <StackPanel Orientation="Vertical">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Command="ApplicationCommands.Open" />
+                    <MenuItem Header="_About" Click="AboutMenuItem" />
+                    <Separator />
+                    <MenuItem Header="_Exit" Click="ExitMenuItem"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,269,0" Width="238" Height="39">
+                <Button x:Name="btnMoveBack" Content="&lt;&lt;" Click="btnMoveBack_Click" Width="50" Height="25" Margin="5,9,5,5"/>
+                <Button x:Name="btnPlay" Content="&gt;" Width="50" Height="25" Margin="5,7" Command="MediaCommands.Play"/>
+                <Button x:Name="btnStop" Content="[]" Command="MediaCommands.Play" Width="50" Height="25" Margin="5"/>
+                <Button x:Name="btnMoveForward" Content="&gt;&gt;" Click="btnMoveForward_Click" Width="50" Height="25" Margin="5"/>
+            </StackPanel>
         </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2" >
+            <Label x:Name="TimeText" Content="00:00:00" Margin="0,0,0,0" Height="30"/>
+            <Slider x:Name="TimeSlider" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" RenderTransformOrigin="-6.25,0.8" Width="471" ValueChanged="slider_ValueChanged" Thumb.DragStarted="DragStarted" Thumb.DragCompleted="DragCompleted"/>
+        </StackPanel>
+        <MediaElement x:Name="MediaPlayer" Grid.Row="1" Grid.RowSpan="1" LoadedBehavior="Manual" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
