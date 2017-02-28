@@ -1,0 +1,95 @@
+﻿<Page
+    x:Class="_3Note5Me.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:_3Note5Me.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <local:MainPageData/>
+    </Page.DataContext>
+    <Page.Resources>
+        <DataTemplate x:Key="Note">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+					Text="{Binding id, Mode=OneWay}"
+					Width="Auto"/>
+                <TextBlock
+					Text="{Binding Title, Mode=OneWay}"
+					Width="Auto"
+					Margin="10, 0"/>
+                <!--<ItemsControl ItemsSource="{Binding Notes, Mode=OneWay}"/>-->
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+				Width="0.3*"/>
+            <ColumnDefinition
+				Width="0.7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+				Height="Auto"/>
+            <RowDefinition
+				Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <CommandBar
+			Grid.Column="0"
+			Grid.ColumnSpan="2">
+            <CommandBar.Content>
+                <TextBlock
+					Text="{Binding SelectedNote.Title}"
+					Margin="12,7"
+					FontSize="24"/>
+            </CommandBar.Content>
+            <AppBarButton
+				Icon="Add"
+				Label="Add" Command="{Binding AddNoteCommand, Mode=TwoWay}"/>
+            <AppBarButton
+				Icon="Save"
+				Label="Save" Command="{Binding SaveNote, Mode=TwoWay}"/>
+            <AppBarButton
+				Icon="Edit"
+				Label="Edit" Command="{Binding EditNote, Mode=TwoWay}"/>
+            <AppBarSeparator/>
+            <AppBarButton
+				Icon="Delete"
+				Label="Delete" Command="{Binding DelNote, Mode=TwoWay}"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton
+					x:Name="About"
+					Label="About"/>
+                <AppBarButton
+					x:Name="Exit"
+					Label="Exit"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+        <TextBox 
+			x:Name="SearchBox"
+			TextWrapping="Wrap"
+			Grid.Column="0"
+			Grid.Row="1"
+			Margin="12"
+			PlaceholderText="Search"
+			FontSize="24"/>
+        <ListView
+			x:Name="NoteList"
+			Grid.Column="0"
+			Grid.Row="2"
+			ItemTemplate="{StaticResource Note}"
+			ItemsSource="{Binding Notes}"
+			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"/>
+        <TextBox
+			x:Name="NoteContent"
+			Grid.Column="1"
+			Grid.Row="1"
+			Grid.RowSpan="2"
+			DataContext="{Binding SelectedNote}"
+			Text="{Binding Content, Mode=TwoWay}"
+			IsReadOnly="True"/>
+    </Grid>
+</Page>
