@@ -9,10 +9,10 @@ using _3Note5Me.ViewModels;
 
 namespace _3Note5Me.Bindings
 {
-    class AddNote : ICommand{
+    class EditNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
-        public AddNote(MainPageData inMpd){
+        public EditNote(MainPageData inMpd){
             mpd = inMpd;
         }
 
@@ -21,8 +21,7 @@ namespace _3Note5Me.Bindings
         }
 
         public void Execute(object parameter){
-            mpd.textAreaEditable = true;
-            mpd.SelectedNote = null;
+            mpd.textAreaEditable = !mpd.textAreaEditable;
         }
 
         public void FireCanExecuteChanged(){

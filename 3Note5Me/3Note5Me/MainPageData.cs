@@ -11,16 +11,23 @@ namespace _3Note5Me.ViewModels{
     class MainPageData : INotifyPropertyChanged{
         public List<Note> Notes { get; set; }
         private Note _SelectedNote;
+
+        public bool textAreaEditable { get; set; }
+
         public AddNote AddNoteCommand { get; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public EditNote EditNoteCommand { get; }
+        public DelNote DelNoteCommand { get; }
+        public SaveNote SaveNoteCommand { get; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
         public Note SelectedNote{
             get{
                 return _SelectedNote;
             }
             set{
                 _SelectedNote = value;
+                textAreaEditable = false;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedNote"));
             }
         }

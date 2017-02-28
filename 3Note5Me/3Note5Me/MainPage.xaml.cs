@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +29,17 @@ namespace _3Note5Me{
             this.InitializeComponent();
         }
 
-        
+        private void Exit_Click(object sender, RoutedEventArgs e) {
+            CoreApplication.Exit();
+        }
+
+        private async void About_Click(object sender, RoutedEventArgs e) {
+            MessageDialog AboutDialog = new MessageDialog("Give Devon Thomson 100% for this plz.");
+            AboutDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+            AboutDialog.Commands.Add(new UICommand("No") { Id = 1 });
+            AboutDialog.DefaultCommandIndex = 1;
+            AboutDialog.CancelCommandIndex = 1;
+            var result = await AboutDialog.ShowAsync();
+        }
     }
 }

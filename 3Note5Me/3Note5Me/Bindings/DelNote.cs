@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Input;
 using _3Note5Me.ViewModels;
+using Windows.UI.Popups;
 
 namespace _3Note5Me.Bindings
 {
-    class AddNote : ICommand{
+    class DelNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
-        public AddNote(MainPageData inMpd){
+        public DelNote(MainPageData inMpd){
             mpd = inMpd;
         }
 
@@ -20,9 +21,13 @@ namespace _3Note5Me.Bindings
             return true;
         }
 
-        public void Execute(object parameter){
-            mpd.textAreaEditable = true;
-            mpd.SelectedNote = null;
+        public async void Execute(object parameter){
+            MessageDialog DelDialog = new MessageDialog("Really (not actually) Delete note? ");
+            DelDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+            DelDialog.Commands.Add(new UICommand("No") { Id = 1 });
+            DelDialog.DefaultCommandIndex = 1;
+            DelDialog.CancelCommandIndex = 1;
+            var result = await DelDialog.ShowAsync();
         }
 
         public void FireCanExecuteChanged(){

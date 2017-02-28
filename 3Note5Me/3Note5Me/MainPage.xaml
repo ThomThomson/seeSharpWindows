@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
         <CommandBar
 			Grid.Column="0"
-			Grid.ColumnSpan="2">
+			Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1920">
             <CommandBar.Content>
                 <TextBlock
 					Text="{Binding SelectedNote.Title}"
@@ -51,21 +51,21 @@
 				Label="Add" Command="{Binding AddNoteCommand, Mode=TwoWay}"/>
             <AppBarButton
 				Icon="Save"
-				Label="Save" Command="{Binding SaveNote, Mode=TwoWay}"/>
+				Label="Save" Command="{Binding SaveNoteCommand, Mode=TwoWay}"/>
             <AppBarButton
 				Icon="Edit"
-				Label="Edit" Command="{Binding EditNote, Mode=TwoWay}"/>
+				Label="Edit" Command="{Binding EditNoteCommand, Mode=TwoWay}"/>
             <AppBarSeparator/>
             <AppBarButton
 				Icon="Delete"
-				Label="Delete" Command="{Binding DelNote, Mode=TwoWay}"/>
+				Label="Delete" Command="{Binding DelNoteCommand, Mode=TwoWay}"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton
 					x:Name="About"
-					Label="About"/>
+					Label="About" Click="About_Click"/>
                 <AppBarButton
 					x:Name="Exit"
-					Label="Exit"/>
+					Label="Exit" Click="Exit_Click"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
         <TextBox 
@@ -90,6 +90,6 @@
 			Grid.RowSpan="2"
 			DataContext="{Binding SelectedNote}"
 			Text="{Binding Content, Mode=TwoWay}"
-			IsReadOnly="True"/>
+			IsReadOnly="{Binding textAreaEditable, Mode=TwoWay}"/>
     </Grid>
 </Page>

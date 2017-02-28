@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\SaveNote.cs" />
+    <Compile Include="Bindings\DelNote.cs" />
+    <Compile Include="Bindings\EditNote.cs" />
     <Compile Include="Bindings\AddNote.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

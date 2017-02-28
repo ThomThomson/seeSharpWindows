@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Input;
 using _3Note5Me.ViewModels;
+using Windows.UI.Popups;
 
 namespace _3Note5Me.Bindings
 {
-    class AddNote : ICommand{
+    class SaveNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
-        public AddNote(MainPageData inMpd){
+        public SaveNote(MainPageData inMpd){
             mpd = inMpd;
         }
 
@@ -20,9 +21,13 @@ namespace _3Note5Me.Bindings
             return true;
         }
 
-        public void Execute(object parameter){
-            mpd.textAreaEditable = true;
-            mpd.SelectedNote = null;
+        public async void Execute(object parameter){
+            MessageDialog SaveDialog = new MessageDialog("Really (not actually) Save note? ");
+            SaveDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+            SaveDialog.Commands.Add(new UICommand("No") { Id = 1 });
+            SaveDialog.DefaultCommandIndex = 1;
+            SaveDialog.CancelCommandIndex = 1;
+            var result = await SaveDialog.ShowAsync();
         }
 
         public void FireCanExecuteChanged(){
