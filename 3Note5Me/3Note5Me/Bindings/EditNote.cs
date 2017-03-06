@@ -17,11 +17,11 @@ namespace _3Note5Me.Bindings
         }
 
         public bool CanExecute(object parameter){
-            return true;
+            return mpd.SelectedNote != null;
         }
 
         public void Execute(object parameter){
-            mpd.textAreaEditable = !mpd.textAreaEditable;
+            mpd.SelectedNote.readOnly = !mpd.SelectedNote.readOnly;
         }
 
         public void FireCanExecuteChanged(){

@@ -18,7 +18,7 @@ namespace _3Note5Me.Bindings
         }
 
         public bool CanExecute(object parameter){
-            return true;
+            return mpd.SelectedNote != null;
         }
 
         public async void Execute(object parameter){

@@ -23,23 +23,8 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-				Width="0.3*"/>
-            <ColumnDefinition
-				Width="0.7*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition
-				Height="Auto"/>
-            <RowDefinition
-				Height="70"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <CommandBar
-			Grid.Column="0"
-			Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1920">
+    <Page.TopAppBar>
+        <CommandBar>
             <CommandBar.Content>
                 <TextBlock
 					Text="{Binding SelectedNote.Title}"
@@ -68,28 +53,44 @@
 					Label="Exit" Click="Exit_Click"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
+    </Page.TopAppBar>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+				Width="0.3*"/>
+            <ColumnDefinition
+				Width="0.7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+				Height="0.1*"/>
+            <RowDefinition
+				Height="0.8*"/>
+        </Grid.RowDefinitions>
+        
         <TextBox 
 			x:Name="SearchBox"
 			TextWrapping="Wrap"
 			Grid.Column="0"
-			Grid.Row="1"
+			Grid.Row="0"
 			Margin="12"
 			PlaceholderText="Search"
 			FontSize="24"/>
         <ListView
 			x:Name="NoteList"
 			Grid.Column="0"
-			Grid.Row="2"
+			Grid.Row="1"
 			ItemTemplate="{StaticResource Note}"
 			ItemsSource="{Binding Notes}"
 			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"/>
         <TextBox
 			x:Name="NoteContent"
 			Grid.Column="1"
-			Grid.Row="1"
-			Grid.RowSpan="2"
+			Grid.Row="0"
+            
 			DataContext="{Binding SelectedNote}"
 			Text="{Binding Content, Mode=TwoWay}"
-			IsReadOnly="{Binding textAreaEditable, Mode=TwoWay}"/>
+			IsReadOnly="{Binding editing, Mode=TwoWay}"/>
     </Grid>
 </Page>

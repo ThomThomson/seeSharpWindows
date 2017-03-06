@@ -21,8 +21,9 @@ namespace _3Note5Me.Bindings
         }
 
         public void Execute(object parameter){
-            mpd.textAreaEditable = true;
-            mpd.SelectedNote = null;
+            Model.Note newNote = new Model.Note(mpd.Notes.Count);
+            mpd.SelectedNote = newNote;
+            mpd.Notes.Add(newNote);
         }
 
         public void FireCanExecuteChanged(){

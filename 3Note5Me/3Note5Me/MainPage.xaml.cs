@@ -34,7 +34,7 @@ namespace _3Note5Me{
         }
 
         private async void About_Click(object sender, RoutedEventArgs e) {
-            MessageDialog AboutDialog = new MessageDialog("Give Devon Thomson 100% for this plz.");
+            MessageDialog AboutDialog = new MessageDialog("Give Devon 100% for this plz.");
             AboutDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
             AboutDialog.Commands.Add(new UICommand("No") { Id = 1 });
             AboutDialog.DefaultCommandIndex = 1;

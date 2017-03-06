@@ -6,41 +6,63 @@ using System.Text;
 using System.Threading.Tasks;
 using _3Note5Me.Model;
 using _3Note5Me.Bindings;
+using Windows.Storage;
+using System.Collections.ObjectModel;
 
 namespace _3Note5Me.ViewModels{
     class MainPageData : INotifyPropertyChanged{
-        public List<Note> Notes { get; set; }
-        private Note _SelectedNote;
-
-        public bool textAreaEditable { get; set; }
-
+        public ObservableCollection<Note> Notes { get; set; }
+        private StorageFolder NotesFolder;
+        public event PropertyChangedEventHandler PropertyChanged;
+        //C O M M A N D  B I N D I N G S
         public AddNote AddNoteCommand { get; }
-
         public EditNote EditNoteCommand { get; }
         public DelNote DelNoteCommand { get; }
         public SaveNote SaveNoteCommand { get; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public Note SelectedNote{
-            get{
-                return _SelectedNote;
-            }
+        private Note _SelectedNote;
+        public Note SelectedNote{get{return _SelectedNote;}
             set{
                 _SelectedNote = value;
-                textAreaEditable = false;
+                _SelectedNote.readOnly = false;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedNote"));
             }
         }
 
+        //C O N S T R U C T O R
         public MainPageData(){
             AddNoteCommand = new AddNote(this);
-            AddNoteCommand.FireCanExecuteChanged();
-            Notes = new List<Note>();
-            Notes.Add(new Note(1, "NOTE 1 TITLE", "Some sweet content yo"));
-            Notes.Add(new Note(2, "NOTE 2 TITLE", "Some more sweet content for your liking"));
-            Notes.Add(new Note(3, "NOTE 3 TITLE", "Hello ladies & Gents. Content here"));
-            Notes.Add(new Note(4, "NOTE 4 TITLE", "All bros love this content"));
-            Notes.Add(new Note(5, "NOTE 5 TITLE", "I have. Just the best. Content. There is."));
+            EditNoteCommand = new EditNote(this);
+            DelNoteCommand = new DelNote(this);
+            SaveNoteCommand = new SaveNote(this);
+            Init();
+        }//E N D  C O N S T R U C T O R
+
+        //M E T H O D init
+        private async void Init() {
+            Notes = new ObservableCollection<Note>();
+            await PopulateNotes();
         }
+
+        //M E T H O D PopulateNotes
+        private async Task PopulateNotes() {
+            Notes = new ObservableCollection<Note>();//delete notes
+            StorageFolder directory = ApplicationData.Current.LocalFolder;
+            //Create folder for notes, or get folder for notes.
+            if (NotesFolder == null) {
+                try {
+                    NotesFolder = await directory.GetFolderAsync("Notes");
+                }
+                catch {
+                    NotesFolder = await directory.CreateFolderAsync("Notes");
+                }
+            }
+            IReadOnlyList<StorageFile> files = await NotesFolder.GetFilesAsync();
+            int id = 0;
+            foreach (StorageFile currentFile in files) {
+                Notes.Add(new Model.Note(id, currentFile.Name.Substring(0, currentFile.Name.LastIndexOf(".")), await FileIO.ReadTextAsync(currentFile)));
+                id++;
+            }
+        }
+
     }
 }
