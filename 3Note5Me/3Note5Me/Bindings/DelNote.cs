@@ -10,7 +10,7 @@ using Windows.UI.Popups;
 
 namespace _3Note5Me.Bindings
 {
-    class DelNote : ICommand{
+    public class DelNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
         public DelNote(MainPageData inMpd){
@@ -29,13 +29,18 @@ namespace _3Note5Me.Bindings
             DelDialog.CancelCommandIndex = 1;
             var result = await DelDialog.ShowAsync();
             if((int)result.Id == 0) {
-                if (mpd.SelectedNote.File != null) {
-                    await mpd.SelectedNote.File.DeleteAsync();
-                }
-                mpd.Notes.Remove(mpd.SelectedNote);
-                mpd.SelectedNote = null;
+                RemoveNote();
             }
 
+        }
+
+        public async void RemoveNote() {
+            if (mpd.SelectedNote.File != null) {
+                await mpd.SelectedNote.File.DeleteAsync();
+            }
+            mpd.Notes.Remove(mpd.SelectedNote);
+            mpd.SelectedNote = null;
+            mpd.Search();
         }
 
         public void FireCanExecuteChanged(){

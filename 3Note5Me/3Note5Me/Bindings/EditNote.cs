@@ -9,7 +9,7 @@ using _3Note5Me.ViewModels;
 
 namespace _3Note5Me.Bindings
 {
-    class EditNote : ICommand{
+    public class EditNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
         public EditNote(MainPageData inMpd){

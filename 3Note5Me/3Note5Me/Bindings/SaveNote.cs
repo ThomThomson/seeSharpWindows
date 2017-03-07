@@ -12,7 +12,7 @@ using Windows.Storage.Streams;
 
 namespace _3Note5Me.Bindings
 {
-    class SaveNote : ICommand{
+    public class SaveNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
         public SaveNote(MainPageData inMpd){

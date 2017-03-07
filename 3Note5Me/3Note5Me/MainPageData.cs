@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 
 namespace _3Note5Me.ViewModels{
-    class MainPageData : INotifyPropertyChanged{
+    public class MainPageData : INotifyPropertyChanged{
 
         #region <----- P R O P E R T I E S ----->
         public ObservableCollection<Note> Notes { get; set; }
@@ -95,7 +95,7 @@ namespace _3Note5Me.ViewModels{
         }//E N D  C O N S T R U C T O R
 
         //M E T H O D Init
-        private async void Init() {
+        public async void Init() {
             Notes = new ObservableCollection<Note>();
             ShownNotes = new ObservableCollection<Note>();
             await PopulateNotes();
@@ -103,7 +103,7 @@ namespace _3Note5Me.ViewModels{
         }//E N D  M E T H O D Init
 
         //M E T H O D PopulateNotes
-        private async Task PopulateNotes() {
+        public async Task PopulateNotes() {
             Notes.Clear();//delete notes
             StorageFolder directory = ApplicationData.Current.LocalFolder;
             //Create folder for notes, or get folder for notes.

@@ -12,7 +12,7 @@ using Windows.Storage;
 
 namespace _3Note5Me.Bindings
 {
-    class AddNote : ICommand{
+    public class AddNote : ICommand{
         public event EventHandler CanExecuteChanged;
         private MainPageData mpd;
         public AddNote(MainPageData inMpd){
@@ -41,11 +41,7 @@ namespace _3Note5Me.Bindings
                     }
                 }
                 if (!nameMatched) {
-                    Model.Note createdNote = new Model.Note(mpd.Notes.Count, titleInput.Text);
-                    StorageFile newNoteFile = await mpd.NotesFolder.CreateFileAsync(createdNote.Title + ".txt");
-                    createdNote.File = newNoteFile;
-                    mpd.Notes.Add(createdNote);
-                    mpd.SelectedNote = createdNote;
+                    await add(titleInput.Text);
                 } else {
                     MessageDialog duplicateNameDialog = new MessageDialog("A note with that title already exists.");
                     await duplicateNameDialog.ShowAsync();
@@ -53,6 +49,15 @@ namespace _3Note5Me.Bindings
                 }
             }
 
+        }
+
+        public async Task add(string inTitle) {
+            Model.Note createdNote = new Model.Note(mpd.Notes.Count, inTitle);
+            StorageFile newNoteFile = await mpd.NotesFolder.CreateFileAsync(createdNote.Title + ".txt");
+            createdNote.File = newNoteFile;
+            mpd.Notes.Add(createdNote);
+            mpd.SelectedNote = createdNote;
+            mpd.Search();
         }
 
         public void FireCanExecuteChanged(){
