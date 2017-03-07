@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Input;
 using _3Note5Me.ViewModels;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Popups;
+using Windows.Storage;
 
 namespace _3Note5Me.Bindings
 {
@@ -20,10 +23,36 @@ namespace _3Note5Me.Bindings
             return true;
         }
 
-        public void Execute(object parameter){
-            Model.Note newNote = new Model.Note(mpd.Notes.Count);
-            mpd.SelectedNote = newNote;
-            mpd.Notes.Add(newNote);
+        public async void Execute(object parameter){
+            TextBox titleInput = new TextBox { Height = 32, AcceptsReturn = false };
+            ContentDialog titleDialog = new ContentDialog() {
+                Title = "Note Title",
+                Content = titleInput,
+                PrimaryButtonText = "Create",
+                SecondaryButtonText = "Cancel"
+            };
+            ContentDialogResult result = await titleDialog.ShowAsync();
+            bool nameMatched = false;
+            if (result == ContentDialogResult.Primary) {
+                foreach(Model.Note currentNote in mpd.Notes) {
+                    if (titleInput.Text == currentNote.Title) {
+                        nameMatched = true;
+                        break;
+                    }
+                }
+                if (!nameMatched) {
+                    Model.Note createdNote = new Model.Note(mpd.Notes.Count, titleInput.Text);
+                    StorageFile newNoteFile = await mpd.NotesFolder.CreateFileAsync(createdNote.Title + ".txt");
+                    createdNote.File = newNoteFile;
+                    mpd.Notes.Add(createdNote);
+                    mpd.SelectedNote = createdNote;
+                } else {
+                    MessageDialog duplicateNameDialog = new MessageDialog("A note with that title already exists.");
+                    await duplicateNameDialog.ShowAsync();
+                    Execute(parameter);
+                }
+            }
+
         }
 
         public void FireCanExecuteChanged(){

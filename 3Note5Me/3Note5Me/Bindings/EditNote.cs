@@ -21,7 +21,7 @@ namespace _3Note5Me.Bindings
         }
 
         public void Execute(object parameter){
-            mpd.SelectedNote.readOnly = !mpd.SelectedNote.readOnly;
+            mpd.CurrentNoteReadOnly = !mpd.CurrentNoteReadOnly;
         }
 
         public void FireCanExecuteChanged(){

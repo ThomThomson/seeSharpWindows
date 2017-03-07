@@ -22,12 +22,20 @@ namespace _3Note5Me.Bindings
         }
 
         public async void Execute(object parameter){
-            MessageDialog DelDialog = new MessageDialog("Really (not actually) Delete note? ");
+            MessageDialog DelDialog = new MessageDialog("Delete this note? ");
             DelDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
             DelDialog.Commands.Add(new UICommand("No") { Id = 1 });
             DelDialog.DefaultCommandIndex = 1;
             DelDialog.CancelCommandIndex = 1;
             var result = await DelDialog.ShowAsync();
+            if((int)result.Id == 0) {
+                if (mpd.SelectedNote.File != null) {
+                    await mpd.SelectedNote.File.DeleteAsync();
+                }
+                mpd.Notes.Remove(mpd.SelectedNote);
+                mpd.SelectedNote = null;
+            }
+
         }
 
         public void FireCanExecuteChanged(){

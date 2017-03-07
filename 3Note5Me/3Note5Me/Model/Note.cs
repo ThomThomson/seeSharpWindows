@@ -10,17 +10,15 @@ namespace _3Note5Me.Model{
         public int id { get; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public bool readOnly { get; set; }
-        public StorageFile File { get; }
+        public StorageFile File { get; set; }
 
         public Note(int inID, string inTitle, string inContent){
             Content = inContent; id = inID; Title = inTitle;
         }
 
-        public Note(int inID) {
+        public Note(int inID, string inTitle) {
             id = inID;
-            readOnly = true;
-            Title = "New Note";
+            Title = inTitle;
         }
 
         

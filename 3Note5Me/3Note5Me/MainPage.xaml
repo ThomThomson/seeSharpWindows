@@ -76,21 +76,22 @@
 			Grid.Row="0"
 			Margin="12"
 			PlaceholderText="Search"
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			FontSize="24"/>
         <ListView
 			x:Name="NoteList"
 			Grid.Column="0"
 			Grid.Row="1"
 			ItemTemplate="{StaticResource Note}"
-			ItemsSource="{Binding Notes}"
+			ItemsSource="{Binding ShownNotes}"
 			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"/>
         <TextBox
 			x:Name="NoteContent"
 			Grid.Column="1"
-			Grid.Row="0"
-            
-			DataContext="{Binding SelectedNote}"
-			Text="{Binding Content, Mode=TwoWay}"
-			IsReadOnly="{Binding editing, Mode=TwoWay}"/>
+			Grid.Row="1"
+			Grid.RowSpan="2"
+			TextWrapping="Wrap"
+			Text="{Binding CurrentNoteContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			IsReadOnly="{Binding CurrentNoteReadOnly}" AcceptsReturn="True" InputScope="Text"/>
     </Grid>
 </Page>
