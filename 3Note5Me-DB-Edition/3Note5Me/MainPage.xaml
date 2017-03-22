@@ -1,0 +1,98 @@
+﻿<Page
+    x:Class="_3Note5Me.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:_3Note5Me.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <local:MainPageData/>
+    </Page.DataContext>
+    <Page.Resources>
+        <DataTemplate x:Key="Note">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+					Text="{Binding id, Mode=OneWay}"
+					Width="Auto"/>
+                <TextBlock
+					Text="{Binding Title, Mode=OneWay}"
+					Width="Auto"
+					Margin="10, 0"/>
+                <!--<ItemsControl ItemsSource="{Binding Notes, Mode=OneWay}"/>-->
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    <Page.TopAppBar>
+        <CommandBar>
+            <CommandBar.Content>
+                <TextBlock
+					Text="{Binding SelectedNote.Title}"
+					Margin="12,7"
+					FontSize="24"/>
+            </CommandBar.Content>
+            <AppBarButton
+				Icon="Add"
+				Label="Add" Command="{Binding AddNoteCommand, Mode=TwoWay}"/>
+            <AppBarButton
+				Icon="Save"
+				Label="Save" Command="{Binding SaveNoteCommand, Mode=TwoWay}"/>
+            <AppBarButton
+				Icon="Edit"
+				Label="Edit" Command="{Binding EditNoteCommand, Mode=TwoWay}"/>
+            <AppBarSeparator/>
+            <AppBarButton
+				Icon="Delete"
+				Label="Delete" Command="{Binding DelNoteCommand, Mode=TwoWay}"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton
+					x:Name="About"
+					Label="About" Click="About_Click"/>
+                <AppBarButton
+					x:Name="Exit"
+					Label="Exit" Click="Exit_Click"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.TopAppBar>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+				Width="0.3*"/>
+            <ColumnDefinition
+				Width="0.7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+				Height="0.1*"/>
+            <RowDefinition
+				Height="0.9*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBox 
+			x:Name="SearchBox"
+			TextWrapping="Wrap"
+			Grid.Column="0"
+			Grid.Row="0"
+			Margin="12"
+			PlaceholderText="Search"
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			FontSize="24"/>
+        <ListView
+			x:Name="NoteList"
+			Grid.Column="0"
+			Grid.Row="1"
+			ItemTemplate="{StaticResource Note}"
+			ItemsSource="{Binding ShownNotes}"
+            SelectionChanged="SelectionChanged"
+			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"/>
+        <RichEditBox
+			x:Name="NoteContent"
+			Grid.Column="1"
+			Grid.Row="0"
+			Grid.RowSpan="2"
+			TextWrapping="Wrap"
+            TextChanged="OnTextChanged"
+			IsReadOnly="{Binding CurrentNoteReadOnly}" AcceptsReturn="True" InputScope="Text"/>
+    </Grid>
+</Page>
