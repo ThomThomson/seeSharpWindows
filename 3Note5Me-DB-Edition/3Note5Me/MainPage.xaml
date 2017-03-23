@@ -33,16 +33,22 @@
             </CommandBar.Content>
             <AppBarButton
 				Icon="Add"
+                AutomationProperties.HelpText="Add a new notes"
 				Label="Add" Command="{Binding AddNoteCommand, Mode=TwoWay}"/>
             <AppBarButton
 				Icon="Save"
-				Label="Save" Command="{Binding SaveNoteCommand, Mode=TwoWay}"/>
+				Label="Save" Command="{Binding SaveNoteCommand, Mode=TwoWay}"
+                AutomationProperties.HelpText="Save the current notes"
+                Click="PrepSave"/>
             <AppBarButton
 				Icon="Edit"
-				Label="Edit" Command="{Binding EditNoteCommand, Mode=TwoWay}"/>
+                AutomationProperties.HelpText="Makes the current note editable"
+				Label="Edit" Command="{Binding EditNoteCommand, Mode=TwoWay}"
+                Click="EditClick"/>
             <AppBarSeparator/>
             <AppBarButton
 				Icon="Delete"
+                AutomationProperties.HelpText="Delete the current notes"
 				Label="Delete" Command="{Binding DelNoteCommand, Mode=TwoWay}"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton
@@ -76,6 +82,7 @@
 			Grid.Row="0"
 			Margin="12"
 			PlaceholderText="Search"
+            AutomationProperties.HelpText="Search notes"
             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			FontSize="24"/>
         <ListView
@@ -85,6 +92,7 @@
 			ItemTemplate="{StaticResource Note}"
 			ItemsSource="{Binding ShownNotes}"
             SelectionChanged="SelectionChanged"
+            AutomationProperties.HelpText="List of your notes"
 			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"/>
         <RichEditBox
 			x:Name="NoteContent"
@@ -93,6 +101,32 @@
 			Grid.RowSpan="2"
 			TextWrapping="Wrap"
             TextChanged="OnTextChanged"
+            AutomationProperties.HelpText="Main text box"
 			IsReadOnly="{Binding CurrentNoteReadOnly}" AcceptsReturn="True" InputScope="Text"/>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton
+                    x:Name="boldButton"
+                    Icon="Bold"
+                    Label="Bold"
+                    ToolTipService.ToolTip="Bold"
+                    AutomationProperties.HelpText="Makes your selection bold"
+                    Click="BoldClick"/>
+            <AppBarButton
+                    x:Name="italicButton"
+                    Icon="Italic"
+                    Label="Italic"
+                    ToolTipService.ToolTip="Italic"
+                    AutomationProperties.HelpText="Italicizes your selection"
+                    Click="ItalicClick"/>
+            <AppBarButton
+                    x:Name="underlineButton"
+                    Icon="Underline"
+                    Label="Underline"
+                    ToolTipService.ToolTip="Underline"
+                    AutomationProperties.HelpText="Underlines your selection"
+                    Click="UnderlineClick"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

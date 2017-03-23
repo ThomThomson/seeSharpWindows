@@ -25,10 +25,10 @@ namespace _3Note5Me{
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page{
+    public sealed partial class MainPage : Page {
         MainPageData mpd;
 
-        public MainPage(){
+        public MainPage() {
             this.InitializeComponent();
             mpd = (MainPageData)this.DataContext;
         }
@@ -45,26 +45,61 @@ namespace _3Note5Me{
             ITextDocument document = NoteContent.Document;
             string documentContent;
             document.GetText(TextGetOptions.FormatRtf, out documentContent);
-            mpd.CurrentNoteContent = documentContent;
+            if (mpd.SelectedNote != null) { mpd.SelectedNote.Content = documentContent; }
         }
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ITextDocument document = NoteContent.Document;
             if (mpd.SelectedNote != null) {
                 NoteContent.IsReadOnly = false;
-                document.SetText(TextSetOptions.FormatRtf, mpd.CurrentNoteContent);
-                //NoteContent.IsReadOnly = true;
-                //boldButton.IsEnabled = false;
-                //underlineButton.IsEnabled = false;
-                //italicButton.IsEnabled = false;
+                if (mpd.SelectedNote.Content != null) {
+                    mpd.CurrentNoteContent = mpd.SelectedNote.Content;
+                    document.SetText(TextSetOptions.FormatRtf, mpd.CurrentNoteContent);
+                } else {
+                    document.SetText(TextSetOptions.FormatRtf, "");
+                }
+                NoteContent.IsReadOnly = true;
             } else {
                 NoteContent.IsReadOnly = false;
                 document = NoteContent.Document;
                 document.SetText(TextSetOptions.FormatRtf, "");
-                //boldButton.IsEnabled = true;
-                //underlineButton.IsEnabled = true;
-                //italicButton.IsEnabled = true;
+                NoteContent.IsReadOnly = true;
             }
+        }
+
+        private void EditClick(object sender, RoutedEventArgs e) {
+            NoteContent.IsReadOnly = !NoteContent.IsReadOnly;
+        }
+
+        private void BoldClick(object sender, RoutedEventArgs e) {
+            Windows.UI.Text.ITextSelection selected = NoteContent.Document.Selection;
+            if (selected != null && !NoteContent.IsReadOnly) {
+                ITextCharacterFormat format = selected.CharacterFormat;
+                format.Bold = Windows.UI.Text.FormatEffect.Toggle;
+                selected.CharacterFormat = format;
+            }
+        }
+        private void ItalicClick(object sender, RoutedEventArgs e) {
+            Windows.UI.Text.ITextSelection selected = NoteContent.Document.Selection;
+            if (selected != null && !NoteContent.IsReadOnly) {
+                ITextCharacterFormat format = selected.CharacterFormat;
+                format.Italic = Windows.UI.Text.FormatEffect.Toggle;
+                selected.CharacterFormat = format;
+            }
+        }
+        private void UnderlineClick(object sender, RoutedEventArgs e) {
+            ITextSelection selected = NoteContent.Document.Selection;
+            if (selected != null && !NoteContent.IsReadOnly) {
+                ITextCharacterFormat format = selected.CharacterFormat;
+                format.Underline = (format.Underline == UnderlineType.None) ? UnderlineType.Single : UnderlineType.None;
+                selected.CharacterFormat = format;
+            }
+        }
+
+        private void PrepSave(object sender, RoutedEventArgs e) {
+            String newContent;
+            NoteContent.Document.GetText(TextGetOptions.FormatRtf, out newContent);
+            mpd.CurrentNoteContent = newContent;
         }
     }
 }

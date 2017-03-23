@@ -9,10 +9,12 @@ using _3Note5Me.Bindings;
 using Windows.Storage;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
+using System.Diagnostics;
+using Windows.UI.Text;
+using Windows.UI.Xaml.Controls;
 
 namespace _3Note5Me.ViewModels{
     public class MainPageData : INotifyPropertyChanged{
-
         #region <----- P R O P E R T I E S ----->
         public List<Note> Notes { get; set; }
         public ObservableCollection<Note> ShownNotes { get; set; }
@@ -34,16 +36,11 @@ namespace _3Note5Me.ViewModels{
         public Note SelectedNote {
             get { return _selectedNote; }
             set {
-                if ((_selectedNote == null || _selectedNote.Content == CurrentNoteContent) && value != null) {
+                if (value != null) {
                     _selectedNote = value;
-                    CurrentNoteContent = _selectedNote.Content;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedNote"));
-                    CurrentNoteReadOnly = true;
                     EditNoteCommand.FireCanExecuteChanged();
                     DelNoteCommand.FireCanExecuteChanged();
                     SaveNoteCommand.FireCanExecuteChanged();
-                } else if (CurrentNoteContent != "" && value != null) {
-                    SaveOnSwitch(value);
                 } else {
                     CurrentNoteContent = "";
                     CurrentNoteReadOnly = true;
@@ -52,7 +49,6 @@ namespace _3Note5Me.ViewModels{
                     DelNoteCommand.FireCanExecuteChanged();
                     SaveNoteCommand.FireCanExecuteChanged();
                 }
-
             }
         }//E N D SelectedNote
 
@@ -103,27 +99,6 @@ namespace _3Note5Me.ViewModels{
             //await PopulateNotes();
             Search();
         }//E N D  M E T H O D Init
-
-        //M E T H O D  SaveOnSwitch
-        public async void SaveOnSwitch(Note noteToSwitchTo) {
-            MessageDialog SaveDialog = new MessageDialog("Save current note before switching? ");
-            SaveDialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-            SaveDialog.Commands.Add(new UICommand("No") { Id = 1 });
-            SaveDialog.DefaultCommandIndex = 1;
-            SaveDialog.CancelCommandIndex = 1;
-            var result = await SaveDialog.ShowAsync();
-            if ((int)result.Id == 0) {
-                SaveNoteCommand.save();
-            }
-            _selectedNote = noteToSwitchTo;
-            CurrentNoteContent = _selectedNote.Content;
-            CurrentNoteReadOnly = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedNote"));
-            EditNoteCommand.FireCanExecuteChanged();
-            DelNoteCommand.FireCanExecuteChanged();
-            SaveNoteCommand.FireCanExecuteChanged();
-        }//E N D  M E T H O D SaveOnSwitch
-
 
         //M E T H O D Search
         public void Search() {

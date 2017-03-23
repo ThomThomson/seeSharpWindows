@@ -20,7 +20,7 @@ namespace _3Note5Me.Bindings
         }
 
         public bool CanExecute(object parameter) {
-            return mpd.SelectedNote != null && !mpd.CurrentNoteReadOnly;
+            return mpd.SelectedNote != null;
         }
 
         public async void Execute(object parameter) {
